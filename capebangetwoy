@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Peminjaman Buku Perpustakaan</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #43cea2, #185a9d);
+            min-height: 100vh;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .card {
+            max-width: 1000px;
+            margin: auto;
+            background: #fff;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        h2 {
+            text-align: center;
+            color: #185a9d;
+            margin-bottom: 20px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        label {
+            font-size: 14px;
+            color: #444;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        textarea {
+            resize: none;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #43cea2;
+            box-shadow: 0 0 5px rgba(67,206,162,0.5);
+        }
+
+        .full {
+            grid-column: span 2;
+        }
+
+        button {
+            grid-column: span 2;
+            padding: 12px;
+            background: linear-gradient(135deg, #43cea2, #185a9d);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 30px;
+            border-collapse: collapse;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th {
+            background: #185a9d;
+            color: white;
+            padding: 12px;
+            font-size: 14px;
+        }
+
+        td {
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #dff1ff;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+    <h2>📚 Form Peminjaman Buku Perpustakaan <br> SMK Al-Basyariah</h2>
+
+    <form id="formPinjam">
+        <div class="form-grid">
+
+            <div>
+                <label>Nama Peminjam</label>
+                <input type="text" id="nama" required>
+            </div>
+
+            <div>
+                <label>Kelas</label>
+                <input type="text" id="kelas">
+            </div>
+
+            <div>
+                <label>Nomor Telepon</label>
+                <input type="tel" id="telepon" placeholder="08xxxxxxxxxx">
+            </div>
+
+            <div>
+                <label>Judul Buku</label>
+                <input type="text" id="judul">
+            </div>
+
+            <div>
+                <label>Kode Buku</label>
+                <input type="text" id="kode">
+            </div>
+
+            <div>
+                <label>Tanggal Pinjam</label>
+                <input type="date" id="tglPinjam">
+            </div>
+
+            <div>
+                <label>Tanggal Kembali</label>
+                <input type="date" id="tglKembali">
+            </div>
+
+            <div class="full">
+                <label>Alamat</label>
+                <textarea id="alamat" rows="2"></textarea>
+            </div>
+
+            <button type="button" onclick="tambahData()">💾 Simpan Data</button>
+
+        </div>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Nama</th>
+                <th>Kelas</th>
+                <th>No Telp</th>
+                <th>Alamat</th>
+                <th>Judul Buku</th>
+                <th>Kode</th>
+                <th>Tgl Pinjam</th>
+                <th>Tgl Kembali</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+
+        <tbody id="dataPeminjaman"></tbody>
+    </table>
+
+    <footer>
+        Sistem Peminjaman Buku • SMK Al-Basyariah
+    </footer>
+</div>
+
+<script>
+    let no = 1;
+    let rowEdit = null;
+
+    function tambahData() {
+        let nama = document.getElementById("nama").value;
+        let kelas = document.getElementById("kelas").value;
+        let telepon = document.getElementById("telepon").value;
+        let alamat = document.getElementById("alamat").value;
+        let judul = document.getElementById("judul").value;
+        let kode = document.getElementById("kode").value;
+        let tglPinjam = document.getElementById("tglPinjam").value;
+        let tglKembali = document.getElementById("tglKembali").value;
+
+        if (nama === "" || judul === "") {
+            alert("Nama dan Judul Buku wajib diisi!");
+            return;
+        }
+
+        let table = document.getElementById("dataPeminjaman");
+
+        if (rowEdit === null) {
+            let row = table.insertRow();
+
+            row.insertCell(0).innerHTML = no++;
+            row.insertCell(1).innerHTML = nama;
+            row.insertCell(2).innerHTML = kelas;
+            row.insertCell(3).innerHTML = telepon;
+            row.insertCell(4).innerHTML = alamat;
+            row.insertCell(5).innerHTML = judul;
+            row.insertCell(6).innerHTML = kode;
+            row.insertCell(7).innerHTML = tglPinjam;
+            row.insertCell(8).innerHTML = tglKembali;
+
+            row.insertCell(9).innerHTML = `
+                <button onclick="editData(this)">✏️ Edit</button>
+                <button onclick="hapusData(this)">🗑️ Hapus</button>
+            `;
+
+        } else {
+            rowEdit.cells[1].innerHTML = nama;
+            rowEdit.cells[2].innerHTML = kelas;
+            rowEdit.cells[3].innerHTML = telepon;
+            rowEdit.cells[4].innerHTML = alamat;
+            rowEdit.cells[5].innerHTML = judul;
+            rowEdit.cells[6].innerHTML = kode;
+            rowEdit.cells[7].innerHTML = tglPinjam;
+            rowEdit.cells[8].innerHTML = tglKembali;
+
+            rowEdit = null;
+        }
+
+        document.getElementById("formPinjam").reset();
+    }
+
+    function editData(btn) {
+        rowEdit = btn.parentElement.parentElement;
+
+        document.getElementById("nama").value = rowEdit.cells[1].innerHTML;
+        document.getElementById("kelas").value = rowEdit.cells[2].innerHTML;
+        document.getElementById("telepon").value = rowEdit.cells[3].innerHTML;
+        document.getElementById("alamat").value = rowEdit.cells[4].innerHTML;
+        document.getElementById("judul").value = rowEdit.cells[5].innerHTML;
+        document.getElementById("kode").value = rowEdit.cells[6].innerHTML;
+        document.getElementById("tglPinjam").value = rowEdit.cells[7].innerHTML;
+        document.getElementById("tglKembali").value = rowEdit.cells[8].innerHTML;
+    }
+
+    function hapusData(btn) {
+        if (confirm("Yakin ingin menghapus data ini?")) {
+            let row = btn.parentElement.parentElement;
+            row.remove();
+        }
+    }
+</script>
+
+</body>
+</html>
